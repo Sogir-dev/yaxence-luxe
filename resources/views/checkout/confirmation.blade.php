@@ -41,6 +41,7 @@
         <div class="mt-6 space-y-1 text-left text-sm text-neutral-400">
             <p><span class="font-medium text-neutral-200">Shipping to:</span> {{ $order->shipping_address }}</p>
             <p><span class="font-medium text-neutral-200">Confirmation sent to:</span> {{ $order->customer_email }}</p>
+            <p><span class="font-medium text-neutral-200">Contact number:</span> {{ $order->customer_phone }}</p>
         </div>
 
         <a href="{{ route('products.index') }}" class="mt-10 inline-block text-xs uppercase tracking-[0.2em] text-gold-300 underline hover:text-gold-200">

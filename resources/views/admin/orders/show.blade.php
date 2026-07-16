@@ -28,6 +28,13 @@
                 <div class="mt-4 space-y-2 text-sm">
                     <p><span class="text-neutral-500">Name:</span> <span class="text-neutral-200">{{ $order->customer_name }}</span></p>
                     <p><span class="text-neutral-500">Email:</span> <span class="text-neutral-200">{{ $order->customer_email }}</span></p>
+                    <p>
+                        <span class="text-neutral-500">Phone:</span>
+                        <a href="tel:{{ $order->customer_phone }}" class="text-gold-300 hover:underline">{{ $order->customer_phone ?? 'Not provided' }}</a>
+                        @if($order->whatsapp_url)
+                            <a href="{{ $order->whatsapp_url }}" target="_blank" class="ml-2 text-xs uppercase tracking-wide text-green-400 hover:underline">WhatsApp &rarr;</a>
+                        @endif
+                    </p>
                     <p><span class="text-neutral-500">Address:</span> <span class="text-neutral-200">{{ $order->shipping_address }}</span></p>
                     <p><span class="text-neutral-500">Account:</span> <span class="text-neutral-200">{{ $order->user ? 'Registered customer' : 'Guest checkout' }}</span></p>
                     <p><span class="text-neutral-500">Placed:</span> <span class="text-neutral-200">{{ $order->created_at->format('M j, Y \a\t g:ia') }}</span></p>

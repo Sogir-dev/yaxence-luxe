@@ -48,6 +48,9 @@
                         <td class="px-4 py-3">
                             <p class="text-neutral-200">{{ $order->customer_name }}</p>
                             <p class="text-xs text-neutral-500">{{ $order->customer_email }}</p>
+                            @if($order->customer_phone)
+                                <a href="tel:{{ $order->customer_phone }}" class="text-xs text-gold-400 hover:underline">{{ $order->customer_phone }}</a>
+                            @endif
                         </td>
                         <td class="px-4 py-3 text-neutral-400">{{ $order->items->sum('quantity') }}</td>
                         <td class="px-4 py-3 text-neutral-300">&#8358;{{ number_format($order->total, 0) }}</td>
