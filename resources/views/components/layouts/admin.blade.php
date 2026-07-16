@@ -17,6 +17,14 @@
                    class="rounded-sm px-3 py-2 {{ request()->routeIs('admin.products.index') ? 'bg-gold-400 text-black' : 'text-neutral-300 hover:bg-neutral-900' }}">
                     Products
                 </a>
+                <a href="{{ route('admin.orders.index') }}"
+                   class="flex items-center justify-between rounded-sm px-3 py-2 {{ request()->routeIs('admin.orders.*') ? 'bg-gold-400 text-black' : 'text-neutral-300 hover:bg-neutral-900' }}">
+                    <span>Orders</span>
+                    @php($pendingCount = \App\Models\Order::where('status', 'pending')->count())
+                    @if($pendingCount > 0)
+                        <span class="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-semibold text-white">{{ $pendingCount }}</span>
+                    @endif
+                </a>
                 <a href="{{ route('admin.products.create') }}"
                    class="rounded-sm px-3 py-2 {{ request()->routeIs('admin.products.create') ? 'bg-gold-400 text-black' : 'text-neutral-300 hover:bg-neutral-900' }}">
                     Add Product

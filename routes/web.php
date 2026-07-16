@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\GoogleController;
@@ -60,6 +61,10 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/products/import/template', [AdminProductController::class, 'downloadTemplate'])->name('products.import.template');
 
     Route::resource('products', AdminProductController::class)->except(['show']);
+
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+    Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
 
     Route::redirect('/', '/admin/products');
 });
