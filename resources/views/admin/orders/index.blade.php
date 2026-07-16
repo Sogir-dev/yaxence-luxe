@@ -6,6 +6,11 @@
         'delivered' => 'border-green-400 text-green-300',
         'cancelled' => 'border-red-400 text-red-300',
     ];
+    $paymentStyles = [
+        'unpaid' => 'border-neutral-600 text-neutral-400',
+        'paid' => 'border-green-400 text-green-300',
+        'failed' => 'border-red-400 text-red-300',
+    ];
 @endphp
 
 <x-layouts.admin title="Orders">
@@ -19,10 +24,16 @@
                     <option value="{{ $s }}" @selected($status === $s)>{{ ucfirst($s) }}</option>
                 @endforeach
             </select>
+            <select name="payment_status" class="rounded-sm border-neutral-700 bg-neutral-900 text-sm text-white">
+                <option value="">All Payments</option>
+                @foreach($paymentStatuses as $p)
+                    <option value="{{ $p }}" @selected($paymentStatus === $p)>{{ ucfirst($p) }}</option>
+                @endforeach
+            </select>
             <button type="submit" class="rounded-sm border border-neutral-700 px-4 py-2 text-xs uppercase tracking-wide text-neutral-300 hover:border-gold-400 hover:text-gold-300">
                 Filter
             </button>
-            @if($status || $search)
+            @if($status || $search || $paymentStatus)
                 <a href="{{ route('admin.orders.index') }}" class="flex items-center text-xs uppercase tracking-wide text-neutral-500 hover:text-gold-300">Clear</a>
             @endif
         </form>
@@ -36,6 +47,7 @@
                     <th class="px-4 py-3">Customer</th>
                     <th class="px-4 py-3">Items</th>
                     <th class="px-4 py-3">Total</th>
+                    <th class="px-4 py-3">Payment</th>
                     <th class="px-4 py-3">Status</th>
                     <th class="px-4 py-3">Date</th>
                     <th class="px-4 py-3"></th>
@@ -55,6 +67,11 @@
                         <td class="px-4 py-3 text-neutral-400">{{ $order->items->sum('quantity') }}</td>
                         <td class="px-4 py-3 text-neutral-300">&#8358;{{ number_format($order->total, 0) }}</td>
                         <td class="px-4 py-3">
+                            <span class="rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-wide {{ $paymentStyles[$order->payment_status] ?? $paymentStyles['unpaid'] }}">
+                                {{ ucfirst($order->payment_status) }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3">
                             <span class="rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-wide {{ $statusStyles[$order->status] ?? $statusStyles['pending'] }}">
                                 {{ ucfirst($order->status) }}
                             </span>
@@ -66,7 +83,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="px-4 py-8 text-center text-neutral-500">No orders found.</td>
+                        <td colspan="8" class="px-4 py-8 text-center text-neutral-500">No orders found.</td>
                     </tr>
                 @endforelse
             </tbody>

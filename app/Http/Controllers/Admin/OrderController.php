@@ -9,14 +9,17 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     public const STATUSES = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+    public const PAYMENT_STATUSES = ['unpaid', 'paid', 'failed'];
 
     public function index(Request $request)
     {
         $status = $request->query('status');
+        $paymentStatus = $request->query('payment_status');
         $search = $request->query('search');
 
         $orders = Order::with('items')
             ->when($status, fn ($query) => $query->where('status', $status))
+            ->when($paymentStatus, fn ($query) => $query->where('payment_status', $paymentStatus))
             ->when($search, fn ($query) => $query->where(function ($q) use ($search) {
                 $q->where('customer_name', 'like', "%{$search}%")
                     ->orWhere('customer_email', 'like', "%{$search}%")
@@ -29,8 +32,10 @@ class OrderController extends Controller
         return view('admin.orders.index', [
             'orders' => $orders,
             'status' => $status,
+            'paymentStatus' => $paymentStatus,
             'search' => $search,
             'statuses' => self::STATUSES,
+            'paymentStatuses' => self::PAYMENT_STATUSES,
         ]);
     }
 

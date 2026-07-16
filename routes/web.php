@@ -25,7 +25,10 @@ Route::delete('/cart/{product}', [CartController::class, 'remove'])->name('cart.
 
 Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/checkout/callback', [CheckoutController::class, 'callback'])->name('checkout.callback');
 Route::get('/checkout/{order}/confirmation', [CheckoutController::class, 'confirmation'])->name('checkout.confirmation');
+Route::get('/checkout/{order}/failed', [CheckoutController::class, 'failed'])->name('checkout.failed');
+Route::post('/checkout/{order}/retry', [CheckoutController::class, 'retryPayment'])->name('checkout.retry');
 
 // Customer authentication
 Route::middleware('guest')->group(function () {

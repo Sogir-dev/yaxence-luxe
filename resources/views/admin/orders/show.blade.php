@@ -43,7 +43,25 @@
         </div>
 
         <div>
+            @php
+                $paymentStyles = [
+                    'unpaid' => 'border-neutral-600 text-neutral-400',
+                    'paid' => 'border-green-400 text-green-300',
+                    'failed' => 'border-red-400 text-red-300',
+                ];
+            @endphp
             <div class="rounded-sm border border-gold-900/30 bg-neutral-900 p-6">
+                <h2 class="text-xs font-semibold uppercase tracking-[0.2em] text-gold-300">Payment</h2>
+                <span class="mt-3 inline-block rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-wide {{ $paymentStyles[$order->payment_status] ?? $paymentStyles['unpaid'] }}">
+                    {{ ucfirst($order->payment_status) }}
+                </span>
+                <div class="mt-3 space-y-1 text-xs text-neutral-500">
+                    <p>Gateway: {{ $order->payment_gateway ? ucfirst($order->payment_gateway) : '—' }}</p>
+                    <p class="break-all">Reference: {{ $order->payment_reference ?? '—' }}</p>
+                </div>
+            </div>
+
+            <div class="mt-6 rounded-sm border border-gold-900/30 bg-neutral-900 p-6">
                 <h2 class="text-xs font-semibold uppercase tracking-[0.2em] text-gold-300">Order Status</h2>
                 <form method="POST" action="{{ route('admin.orders.status', $order) }}" class="mt-4 space-y-3">
                     @csrf

@@ -9,7 +9,11 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $orders = $request->user()->orders()->with('items')->latest()->paginate(10);
+        $orders = $request->user()->orders()
+            ->where('payment_status', 'paid')
+            ->with('items')
+            ->latest()
+            ->paginate(10);
 
         return view('customer.orders.index', compact('orders'));
     }

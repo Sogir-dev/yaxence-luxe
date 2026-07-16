@@ -33,8 +33,9 @@
                 </div>
 
                 <button type="submit" class="w-full rounded-sm bg-gold-400 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-black hover:bg-gold-300">
-                    Place Order
+                    Proceed to Payment
                 </button>
+                <p class="text-center text-xs text-neutral-500">You'll be securely redirected to Paystack to complete your payment.</p>
             </form>
 
             <div class="rounded-sm border border-gold-900/30 bg-neutral-950 p-6">
