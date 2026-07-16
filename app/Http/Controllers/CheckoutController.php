@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderConfirmed;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\Cart;
 use App\Services\Paystack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
@@ -127,6 +130,12 @@ class CheckoutController extends Controller
 
             $order->update(['payment_status' => 'paid']);
         });
+
+        try {
+            Mail::to($order->customer_email)->send(new OrderConfirmed($order));
+        } catch (\Throwable $e) {
+            Log::error('Failed to send order confirmation email for order #'.$order->id.': '.$e->getMessage());
+        }
 
         return redirect()->route('checkout.confirmation', $order)->with('status', 'Payment received — thank you!');
     }
