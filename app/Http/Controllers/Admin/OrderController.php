@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderStatusUpdated;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -53,7 +56,17 @@ class OrderController extends Controller
             'status' => ['required', 'in:'.implode(',', self::STATUSES)],
         ]);
 
+        $statusChanged = $order->status !== $data['status'];
+
         $order->update($data);
+
+        if ($statusChanged && $order->payment_status === 'paid') {
+            try {
+                Mail::to($order->customer_email)->send(new OrderStatusUpdated($order));
+            } catch (\Throwable $e) {
+                Log::error('Failed to send order status email for order #'.$order->id.': '.$e->getMessage());
+            }
+        }
 
         return back()->with('status', 'Order #'.$order->id.' marked as '.$data['status'].'.');
     }
