@@ -59,3 +59,9 @@ if (searchToggle && searchBar) {
         }
     });
 }
+
+if (document.getElementById('checkout-form')) {
+    import('./checkout-payment.js').then(({ initCheckoutPayment }) => {
+        initCheckoutPayment();
+    });
+}

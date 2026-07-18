@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('checkout.retry', $order) }}" class="mt-8">
+        <form id="checkout-form" method="POST" action="{{ route('checkout.retry', $order) }}" class="mt-8">
             @csrf
             <button type="submit" class="w-full rounded-sm bg-gold-400 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-black hover:bg-gold-300">
                 Try Payment Again
@@ -33,4 +33,6 @@
             &larr; Back to Your Bag
         </a>
     </div>
+
+    <x-payment-loading-overlay />
 </x-layouts.app>

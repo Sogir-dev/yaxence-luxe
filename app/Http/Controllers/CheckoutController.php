@@ -83,10 +83,10 @@ class CheckoutController extends Controller
 
         $this->cart->clear();
 
-        return $this->redirectToPaystack($order);
+        return $this->redirectToPaystack($request, $order);
     }
 
-    public function retryPayment(Order $order)
+    public function retryPayment(Request $request, Order $order)
     {
         if ($order->payment_status === 'paid') {
             return redirect()->route('checkout.confirmation', $order);
@@ -98,7 +98,7 @@ class CheckoutController extends Controller
 
         $order->update(['payment_reference' => $this->generateReference()]);
 
-        return $this->redirectToPaystack($order);
+        return $this->redirectToPaystack($request, $order);
     }
 
     public function callback(Request $request)
@@ -159,7 +159,7 @@ class CheckoutController extends Controller
         ]);
     }
 
-    protected function redirectToPaystack(Order $order)
+    protected function redirectToPaystack(Request $request, Order $order)
     {
         $url = $this->paystack->initialize(
             reference: $order->payment_reference,
@@ -168,6 +168,10 @@ class CheckoutController extends Controller
             callbackUrl: route('checkout.callback'),
             metadata: ['order_id' => $order->id],
         );
+
+        if ($request->wantsJson()) {
+            return response()->json(['redirect_url' => $url]);
+        }
 
         return redirect()->away($url);
     }

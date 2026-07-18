@@ -4,7 +4,7 @@
         <h1 class="mt-3 font-serif text-4xl text-white">Checkout</h1>
 
         <div class="mt-10 grid grid-cols-1 gap-14 lg:grid-cols-3">
-            <form method="POST" action="{{ route('checkout.store') }}" class="space-y-6 lg:col-span-2">
+            <form id="checkout-form" method="POST" action="{{ route('checkout.store') }}" class="space-y-6 lg:col-span-2">
                 @csrf
 
                 <div>
@@ -55,4 +55,6 @@
             </div>
         </div>
     </div>
+
+    <x-payment-loading-overlay />
 </x-layouts.app>
